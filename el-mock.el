@@ -6,7 +6,7 @@
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
 ;; Version: 1.24
 ;; Keywords: lisp, testing, unittest
-;; URL: http://www.emacswiki.org/cgi-bin/wiki/download/el-mock.el
+;; URL: http://github.com/rejeep/el-mock.el
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
