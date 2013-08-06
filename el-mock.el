@@ -3,6 +3,7 @@
 ;; Copyright (C) 2008, 2010, 2012  rubikitch
 
 ;; Author: rubikitch <rubikitch@ruby-lang.org>
+;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
 ;; Version: 1.24
 ;; Keywords: lisp, testing, unittest
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/download/el-mock.el
