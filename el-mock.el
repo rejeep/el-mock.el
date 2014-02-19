@@ -93,7 +93,7 @@
    (lambda ()
      (when (fboundp funcsym)
        (put funcsym 'mock-original-func (symbol-function funcsym)))
-     (ad-safe-fset funcsym `(lambda (&rest x) ,value)))))
+     (fset funcsym `(lambda (&rest x) ,value)))))
 
 (defun stub/teardown (funcsym)
   (mock-suppress-redefinition-message
@@ -101,7 +101,7 @@
      (let ((func (get funcsym 'mock-original-func)))
        (if (not func)
            (fmakunbound funcsym)
-         (ad-safe-fset funcsym func)
+         (fset funcsym func)
          ;; may be unadviced
          )))))
     
@@ -113,7 +113,7 @@
        (when (fboundp funcsym)
          (put funcsym 'mock-original-func (symbol-function funcsym)))
        (put funcsym 'mock-call-count 0)
-       (ad-safe-fset funcsym
+       (fset funcsym
                      `(lambda (&rest actual-args)
                         (incf (get ',funcsym 'mock-call-count))
                         (add-to-list 'mock-verify-list
@@ -126,7 +126,7 @@
      (let ()
        (when (fboundp funcsym)
          (put funcsym 'mock-original-func (symbol-function funcsym)))
-       (ad-safe-fset funcsym
+       (fset funcsym
                      `(lambda (&rest actual-args)
                         (signal 'mock-error '(called))))))))
 
