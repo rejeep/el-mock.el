@@ -370,8 +370,11 @@ Example:
       ;; TODO defie mock-syntax-error / detect mock-syntax-error in expectations 
       (desc "abused stub macro")
       (expect (error mock-syntax-error '("Use `(stub FUNC)' or `(stub FUNC => RETURN-VALUE)'"))
-        (with-mock
-          (stub fooz 7)))
+        ;; This would fail during load due to eager macro expansion, so hide it
+        ;; in `eval'.
+        (eval
+         '(with-mock
+            (stub fooz 7))))
       (expect (error-message "Do not use `stub' outside")
         (let (in-mocking) ; while executing `expect', `in-mocking' is t.
           (stub hahahaha)))
@@ -441,8 +444,11 @@ Example:
           (test1)))
       (desc "abused mock macro")
       (expect (error mock-syntax-error '("Use `(mock FUNC-SPEC)' or `(mock FUNC-SPEC => RETURN-VALUE)'"))
-        (with-mock
-          (mock (fooz) 7)))
+        ;; This would fail during load due to eager macro expansion, so hide it
+        ;; in `eval'.
+        (eval
+         '(with-mock
+            (mock (fooz) 7))))
       (expect (error-message "Do not use `mock' outside")
         (let (in-mocking) ; while executing `expect', `in-mocking' is t.
           (mock (hahahaha))))
