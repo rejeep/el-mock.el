@@ -688,6 +688,4 @@ Example:
 
 (provide 'el-mock)
 
-;; How to save (DO NOT REMOVE!!)
-;; (emacswiki-post "el-mock.el")
 ;;; el-mock.el ends here
