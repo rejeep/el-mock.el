@@ -6,3 +6,13 @@ _NOTE: El mock has moved from
 [@rejeep](https://github.com/rejeep)._
 
 El mock is a mocking library for Emacs. 
+
+## Contribution
+
+Be sure to!
+
+Install [Cask](https://github.com/cask/cask) if you haven't already.
+
+Run the unit tests with:
+
+    $ make test
