@@ -357,4 +357,10 @@
          (with-mock
           (mock (foo 1) => 2 :times 2)
           'ok))
+
+ (desc "too few arguments")
+ (expect (error mock-error '((foo 1) (foo)))
+   (with-mock
+     (mock (foo 1))
+     (foo)))
  )
