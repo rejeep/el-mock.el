@@ -123,6 +123,9 @@
         (apply 'mock-verify-args args)))
 
 (defun mock-verify-args (funcsym expected-args actual-args expected-times)
+  (unless (= (length expected-args) (length actual-args))
+    (signal 'mock-error (list (cons funcsym expected-args)
+                              (cons funcsym actual-args))))
   (loop for e in expected-args
         for a in actual-args
         do
