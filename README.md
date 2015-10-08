@@ -7,6 +7,15 @@ _NOTE: El mock has moved from
 
 El mock is a mocking library for Emacs. 
 
+## How to use it
+Add this to your test-helper, [for instance](https://github.com/rejeep/prodigy.el/blob/700eb15293260fdfa2fc0cff38df600693b7e4e5/test/test-helper.el#L107-L109)
+```
+(require 'el-mock)
+(eval-when-compile
+    (require 'cl)) ;; for el-mock
+```
+
+
 ## Contribution
 
 Be sure to!
