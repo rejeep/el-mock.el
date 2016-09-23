@@ -364,3 +364,20 @@
      (mock (foo 1))
      (foo)))
  )
+
+(defun el-mock-test--signal ()
+  (error "Foo"))
+
+
+(ert-deftest preserve-stacktrace ()
+  "Test that mocking doesn’t mess with the backtrace recorded by
+‘ert-run-test’."
+  (let ((result (ert-run-test
+                 (make-ert-test
+                  :body (lambda ()
+                          (with-mock (el-mock-test--signal)))))))
+    (should (ert-test-failed-p result))
+    (should (equal (ert-test-failed-condition result)
+                   '(error "Foo")))
+    (should (equal (car-safe (ert-test-failed-backtrace result))
+                   '(t el-mock-test--signal)))))

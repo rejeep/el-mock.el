@@ -149,17 +149,16 @@ When you adapt Emacs Lisp Mock to a testing framework, wrap test method around t
         -stubbed-functions
         -mocked-functions
         (in-mocking t)
-        any-error)
+        (any-error t))
     ;; (setplist 'mock-original-func nil)
     ;; (setplist 'mock-call-count nil)
     (unwind-protect
-        (condition-case e
+        (prog1
             (funcall body-fn)
-          (error (setq any-error e)))
+          (setq any-error nil))
       (mapc #'stub/teardown -stubbed-functions)
       (unwind-protect
-          (if any-error
-              (signal (car any-error) (cdr any-error))
+          (unless any-error
             (mock-verify))
         (mapc #'mock/teardown -mocked-functions)))))
 
