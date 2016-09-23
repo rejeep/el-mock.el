@@ -46,7 +46,8 @@
  ;;         (with-mock
  ;;          (stub fooz 7)))
  (expect (error-message "Do not use `stub' outside")
-         (let (in-mocking) ; while executing `expect', `in-mocking' is t.
+         (let (in-mocking  ; while executing `expect', `in-mocking' is t.
+               (text-quoting-style 'grave))
            (stub hahahaha)))
  (desc "mock macro")
  (expect 2
@@ -117,7 +118,8 @@
  ;;         (with-mock
  ;;          (mock (fooz) 7)))
  (expect (error-message "Do not use `mock' outside")
-         (let (in-mocking) ; while executing `expect', `in-mocking' is t.
+         (let (in-mocking  ; while executing `expect', `in-mocking' is t.
+               (text-quoting-style 'grave))
            (mock (hahahaha))))
 
  (desc "mock with stub")
@@ -260,7 +262,8 @@
           (hoge 1)))
  (desc "abused not-called macro")
  (expect (error-message "Do not use `not-called' outside")
-         (let (in-mocking) ; while executing `expect', `in-mocking' is t.
+         (let (in-mocking  ; while executing `expect', `in-mocking' is t.
+               (text-quoting-style 'grave))
            (not-called hahahaha)))
  (desc "not-called for adviced function")
  (expect "not-called"
