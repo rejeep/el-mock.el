@@ -15,6 +15,20 @@ Add this to your test-helper, [for instance](https://github.com/rejeep/prodigy.e
     (require 'cl)) ;; for el-mock
 ```
 
+An example of a simple mock that displays "/mocked/file/name.el":
+```
+(with-mock
+  (stub buffer-file-name => "/mocked/file/name.el")
+  (display-message-or-buffer (buffer-file-name)))
+```
+
+## Documentation
+
+Find the documentation at `M-x describe-function RET with-mock RET`
+and `M-x describe-function RET mocklet RET`.
+
+The old documentation is at https://www.emacswiki.org/emacs/EmacsLispMock
+
 
 ## Contribution
 
