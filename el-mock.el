@@ -58,7 +58,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 (require 'advice)
 
 (defvar -stubbed-functions nil)
@@ -115,24 +115,24 @@
 (put 'mock-error 'error-conditions '(mock-error error))
 (put 'mock-error 'error-message "Mock error")
 (defun mock-verify ()
-  (loop for f in -mocked-functions
-        when (equal 0 (get f 'mock-call-count))
-        do (signal 'mock-error (list 'not-called f)))
-  (loop for args in mock-verify-list
-        do
-        (apply 'mock-verify-args args)))
+  (cl-loop for f in -mocked-functions
+           when (equal 0 (get f 'mock-call-count))
+           do (signal 'mock-error (list 'not-called f)))
+  (cl-loop for args in mock-verify-list
+           do
+           (apply 'mock-verify-args args)))
 
 (defun mock-verify-args (funcsym expected-args actual-args expected-times)
   (unless (= (length expected-args) (length actual-args))
     (signal 'mock-error (list (cons funcsym expected-args)
                               (cons funcsym actual-args))))
-  (loop for e in expected-args
-        for a in actual-args
-        do
-        (unless (eq e '*)               ; `*' is wildcard argument
-          (unless (equal (eval e) a)
-            (signal 'mock-error (list (cons funcsym expected-args)
-                                      (cons funcsym actual-args))))))
+  (cl-loop for e in expected-args
+           for a in actual-args
+           do
+           (unless (eq e '*)               ; `*' is wildcard argument
+             (unless (equal (eval e) a)
+               (signal 'mock-error (list (cons funcsym expected-args)
+                                         (cons funcsym actual-args))))))
   (let ((actual-times (or (get funcsym 'mock-call-count) 0)))
     (and expected-times (/= expected-times actual-times)
          (signal 'mock-error (list (cons funcsym expected-args)
