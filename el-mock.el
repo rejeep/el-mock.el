@@ -94,7 +94,7 @@
        (put funcsym 'mock-call-count 0)
        (fset funcsym
                      `(lambda (&rest actual-args)
-                        (incf (get ',funcsym 'mock-call-count))
+                        (cl-incf (get ',funcsym 'mock-call-count))
                         (add-to-list 'mock-verify-list
                                      (list ',funcsym ',(cdr func-spec) actual-args ,times))
                         ,value))))))
