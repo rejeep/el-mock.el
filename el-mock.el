@@ -1,4 +1,4 @@
-;;; el-mock.el --- Tiny Mock and Stub framework in Emacs Lisp
+;;; el-mock.el --- Tiny Mock and Stub framework in Emacs Lisp  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2008, 2010, 2012  rubikitch
 

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (expectations
  (desc "stub setup/teardown")
  (expect 2
