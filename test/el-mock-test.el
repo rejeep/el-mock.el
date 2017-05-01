@@ -1,3 +1,22 @@
+;; -*- lexical-binding: t; -*-
+
+(declare-function foo "el-mock-test")
+(declare-function foox "el-mock-test")
+(declare-function hogehoges "el-mock-test")
+(declare-function fooz "el-mock-test")
+(declare-function hoge "el-mock-test")
+(declare-function me "el-mock-test")
+(declare-function foom "el-mock-test")
+(declare-function bar "el-mock-test")
+(declare-function f "el-mock-test")
+(declare-function vi "el-mock-test")
+(declare-function test1 "el-mock-test")
+(declare-function defined-func "el-mock-test")
+(declare-function a "el-mock-test")
+(declare-function b "el-mock-test")
+(declare-function blah "el-mock-test")
+(declare-function fugaga "el-mock-test")
+
 (expectations
  (desc "stub setup/teardown")
  (expect 2
@@ -60,7 +79,7 @@
           (mock (bar 7) => 1)
           (+ (foo 5) (bar 7))))
  (expect 3
-         (flet ((plus () (+ (foo 5) (bar 7))))
+         (cl-flet ((plus () (+ (foo 5) (bar 7))))
            (with-mock
             (mock (foo 5) => 2)
             (mock (bar 7) => 1)
@@ -163,7 +182,7 @@
          (mocklet ((foo => 2))
                   (foo 1 2 3)))
  (expect 3
-         (defun defined-func (x) 3)
+         (defun defined-func (_x) 3)
          (prog1
              (mocklet ((defined-func => 3))
                       (defined-func 3))
@@ -184,9 +203,8 @@
  (expect "xxx"
          (defun blah (x) (* x 2))
          (prog1
-             (let ((orig (symbol-function 'blah)))
-               (mocklet ((blah => "xxx"))
-                        (blah "xx")))
+             (mocklet ((blah => "xxx"))
+               (blah "xx"))
            (fmakunbound 'blah)))
  (expect t
          (defun blah (x) (* x 2))
@@ -205,9 +223,8 @@
             (defadvice fugaga (around test activate)
               (setq ad-return-value (concat "[" ad-return-value "]")))
             (prog1
-                (let ((orig (symbol-function 'fugaga)))
-                  (mocklet ((fugaga => "xxx"))
-                           (fugaga "aaaaa")))
+                (mocklet ((fugaga => "xxx"))
+                  (fugaga "aaaaa"))
               (fmakunbound 'fugaga)))))
  (expect t
          (mock-suppress-redefinition-message
@@ -230,9 +247,8 @@
             (defadvice fugaga (around test activate)
               (setq ad-return-value (concat "[" ad-return-value "]")))
             (prog1
-                (let ((orig (symbol-function 'fugaga)))
-                  (mocklet (((fugaga "aaaaa") => "xx"))
-                           (fugaga "aaaaa")))
+                (mocklet (((fugaga "aaaaa") => "xx"))
+                  (fugaga "aaaaa"))
               (fmakunbound 'fugaga)))))
  (expect t
          (mock-suppress-redefinition-message
@@ -273,9 +289,8 @@
             (defadvice fugaga (around test activate)
               (setq ad-return-value (concat "[" ad-return-value "]")))
             (prog1
-                (let ((orig (symbol-function 'fugaga)))
-                  (mocklet ((fugaga not-called))
-                           "not-called"))
+                (mocklet ((fugaga not-called))
+                  "not-called")
               (fmakunbound 'fugaga)))))
  (expect t
          (mock-suppress-redefinition-message

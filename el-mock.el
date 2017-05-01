@@ -1,4 +1,4 @@
-;;; el-mock.el --- Tiny Mock and Stub framework in Emacs Lisp
+;;; el-mock.el --- Tiny Mock and Stub framework in Emacs Lisp  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2008, 2010, 2012  rubikitch
 
@@ -106,8 +106,8 @@
        (when (fboundp funcsym)
          (put funcsym 'mock-original-func (symbol-function funcsym)))
        (fset funcsym
-                     `(lambda (&rest actual-args)
-                        (signal 'mock-error '(called))))))))
+                     (lambda (&rest _actual-args)
+                       (signal 'mock-error '(called))))))))
 
 (defalias 'mock/teardown 'stub/teardown)
 
