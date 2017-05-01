@@ -106,8 +106,8 @@
        (when (fboundp funcsym)
          (put funcsym 'mock-original-func (symbol-function funcsym)))
        (fset funcsym
-                     `(lambda (&rest actual-args)
-                        (signal 'mock-error '(called))))))))
+                     (lambda (&rest _actual-args)
+                       (signal 'mock-error '(called))))))))
 
 (defalias 'mock/teardown 'stub/teardown)
 
