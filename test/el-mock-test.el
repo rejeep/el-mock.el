@@ -17,6 +17,8 @@
 (declare-function blah "el-mock-test")
 (declare-function fugaga "el-mock-test")
 
+(defvar el-mock-test-var)
+
 (expectations
  (desc "stub setup/teardown")
  (expect 2
@@ -104,6 +106,13 @@
          (with-mock
           (mock (me 1) => (+ 3 31))
           (me 1)))
+ (expect nil
+         (let ((el-mock-test-var 11))
+           (with-mock
+             (setq el-mock-test-var 22)
+             (mock (me el-mock-test-var)) ; not yet evaluated
+             (setq el-mock-test-var 33)
+             (me 33))))
 
  (desc "unfulfilled mock")
  (expect (error mock-error '((foom 5) (foom 6)))
