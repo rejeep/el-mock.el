@@ -406,5 +406,18 @@
     (should (ert-test-failed-p result))
     (should (equal (ert-test-failed-condition result)
                    '(error "Foo")))
-    (should (equal (car-safe (ert-test-failed-backtrace result))
-                   '(t el-mock-test--signal)))))
+    (let ((backtrace (ert-test-failed-backtrace result)))
+      (should (consp backtrace))
+      ;; In Emacs 26, the backtrace correctly starts at the ‘error’ call, but
+      ;; that’s expanded to a ‘signal’.  In previous versions, one level is
+      ;; skipped.  Also, the format is slightly different because Emacs 26 uses
+      ;; ‘backtrace-frames’, whereas older versions use ‘backtrace-frame’.  We
+      ;; allow both variants here.
+      (should (or (equal (list (car backtrace)
+                               (cadr backtrace)
+                               (caddr backtrace))
+                         '((t signal (error ("Foo")) nil)
+                           (t error ("Foo") nil)
+                           (t el-mock-test--signal nil nil)))
+                  (equal (car backtrace)
+                         '(t el-mock-test--signal)))))))
