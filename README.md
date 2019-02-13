@@ -27,6 +27,28 @@ An example of a simple mock that displays "/mocked/file/name.el":
   (display-message-or-buffer (buffer-file-name)))
 ```
 
+An example of a simple mock that operates on the input:
+```emacs-lisp
+(with-mock
+  (fstub format => (lambda (fmt &rest _args) fmt))
+  (emacs-version))
+```
+
+An example of a simple mock that invokes another function:
+```emacs-lisp
+(defun format-stub (fmt &rest _args) fmt)
+(with-mock
+  (fstub format => format-stub)
+  (emacs-version))
+```
+
+An example of a simple mock that generates an error:
+```emacs-lisp
+(with-mock
+  (fstub format => (lambda (_fmt &rest _args) (error "Formatting error")))
+  (emacs-version))
+```
+
 ## Documentation
 
 Find the documentation at `M-x describe-function RET with-mock RET`
