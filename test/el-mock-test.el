@@ -31,6 +31,17 @@
          (foox 1 2 3)
          (stub/teardown 'foox)
          (fboundp 'foox))
+ (desc "fstub setup/teardown")
+ (expect 6
+         (fstub/setup 'fool (lambda (x y z) (+ x y z)))
+         (prog1
+             (fool 1 2 3)
+           (stub/teardown 'fool)))
+ (expect nil
+         (fstub/setup 'fools (lambda (&rest _args) 2))
+         (fools 1 2 3)
+         (stub/teardown 'fools)
+         (fboundp 'fools))
  (desc "with-mock interface")
  (expect 9801
          (with-mock
@@ -70,6 +81,37 @@
          (let (in-mocking  ; while executing `expect', `in-mocking' is t.
                (text-quoting-style 'grave))
            (stub hahahaha)))
+ (desc "fstub macro")
+ (expect 10000
+         (with-mock
+           (fstub fooz => 1+)
+           (fooz 9999)))
+ (expect nil
+         (with-mock
+           (fstub fooz => (lambda (_x) 2))
+           (fooz 3))
+         (fboundp 'fooz))
+ (expect 'hoge
+         (with-mock
+           (fstub me => (lambda (_x) 'hoge))
+           (me 1)))
+ (expect 35
+         (with-mock
+           (fstub me => (lambda (x) (+ x 3 31)))
+           (me 1)))
+ ;; ;; TODO defie mock-syntax-error / detect mock-syntax-error in expectations
+ ;; (desc "abused fstub macro")
+ ;; (expect (error mock-syntax-error '("Use `(fstub FUNC => (lambda (ARGS...) BODY))' or `(fstub FUNC => OTHER_FUNC)'"))
+ ;;         (with-mock
+ ;;          (fstub fooz 7)))
+ (expect (error-message "Do not use `fstub' outside")
+         (let (in-mocking  ; while executing `expect', `in-mocking' is t.
+               (text-quoting-style 'grave))
+           (fstub hahahaha => 1+)))
+ (expect (error-message "Test error")
+         (with-mock
+           (fstub mee => (lambda (_arg) (error "Test error")))
+           (mee 2)))
  (desc "mock macro")
  (expect 2
          (with-mock

@@ -48,12 +48,15 @@
 
 ;; Within `with-mock' body (or argument function specified in
 ;; `mock-protect'), you can create a mock and a stub. To create a
-;; stub, use `stub' macro. To create a mock, use `mock' macro.
+;; stub that returns a constant value, use `stub' macro. To create
+;; a stub that operates on input or raises an error, use `fstub'
+;; macro. To create a mock, use `mock' macro.
   
 ;; For further information: see docstrings.
 ;; [EVAL IT] (describe-function 'with-mock)
 ;; [EVAL IT] (describe-function 'mocklet)
 ;; [EVAL IT] (describe-function 'stub)
+;; [EVAL IT] (describe-function 'fstub)
 ;; [EVAL IT] (describe-function 'mock)
 
 ;;; Code:
@@ -84,6 +87,15 @@
          ;; may be unadviced
          )))))
     
+;;;; fstub setup,
+;;;; teardown is not needed, since fstub is an 'addon' to stub
+(defun fstub/setup (funcsym fn)
+  (mock-suppress-redefinition-message
+   (lambda ()
+     (when (fboundp funcsym)
+       (put funcsym 'mock-original-func (symbol-function funcsym)))
+     (fset funcsym fn))))
+
 ;;;; mock setup/teardown
 (defun mock/setup (func-spec value times)
   (mock-suppress-redefinition-message
@@ -210,6 +222,29 @@ Example:
     `(if (not in-mocking)
          (error "Do not use `stub' outside")
        (stub/setup ',function ',value)
+       (push ',function -stubbed-functions))))
+
+(defmacro fstub (function &rest rest)
+  "Create a stub for FUNCTION with a lambda.
+Stubs are temporary functions which accept any arguments and invoke a lambda.
+Stubs are removed outside `with-mock' (`with-stub' is an alias) and `mocklet'.
+
+Synopsis:
+* (fstub FUNCTION => (lambda (ARGUMENTS...) BODY))
+  Create a FUNCTION stub which applies ARGUMENTS to the BODY of the lambda
+* (fstub FUNCTION => OTHER_FUNCTION)
+  Create a FUNCTION stub which invokes OTHER_FUNCTION
+
+Example:
+  (with-mock
+    (fstub format => (lambda (fmt &rest _args) fmt))
+    (emacs-version))              ; => \"GNU Emacs %s (build %s, %s%s%s%s)%s\"
+"
+  (let ((value (cond ((plist-get rest '=>))
+                     (t (signal 'mock-syntax-error '("Use `(fstub FUNC => (lambda (ARGS...) BODY))' or `(fstub FUNC => OTHER_FUNC)'"))))))
+    `(if (not in-mocking)
+         (error "Do not use `fstub' outside")
+       (fstub/setup ',function ',value)
        (push ',function -stubbed-functions))))
 
 (defmacro mock (func-spec &rest rest)
