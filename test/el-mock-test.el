@@ -389,8 +389,8 @@
  (expect (error mock-error '((foo 1) (foo)))
    (with-mock
      (mock (foo 1))
-     (foo)))
- )
+     (foo))))
+ 
 
 (defun el-mock-test--signal ()
   (error "Foo"))
@@ -406,5 +406,17 @@
     (should (ert-test-failed-p result))
     (should (equal (ert-test-failed-condition result)
                    '(error "Foo")))
-    (should (equal (car-safe (ert-test-failed-backtrace result))
-                   '(t el-mock-test--signal)))))
+    (cond
+     ((version< emacs-version "26")
+      (should (equal
+               (nth 0 (ert-test-failed-backtrace result))
+               '(t el-mock-test--signal))))
+     ((version< emacs-version "27")
+      (should (equal
+               (nth 2 (ert-test-failed-backtrace result))
+               '(t el-mock-test--signal nil nil))))
+     (t
+      (should (equal
+               (nth 2 (ert-test-failed-backtrace result))
+               (record 'backtrace-frame t 'el-mock-test--signal
+                       nil nil nil nil nil)))))))
