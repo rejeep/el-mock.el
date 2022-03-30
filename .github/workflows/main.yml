@@ -37,6 +37,13 @@ jobs:
     - name: Test
       run: make test
 
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: emacs-${{ matrix.emacs_version }}
+        parallel: true
+
     - name: SSH into container on failure
       if: ${{ false }}
       # You can use this if statement to enable this during development.
@@ -45,3 +52,13 @@ jobs:
       with:
         ## limits ssh access and adds the ssh public key for the user which triggered the workflow
         limit-access-to-actor: true
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
