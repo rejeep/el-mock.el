@@ -1,0 +1,47 @@
+name: Test
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        emacs_version: ['24.4', '24.5', '25.1', '25.2', '26.1', '27.1', 'snapshot']
+        cask_version: ['snapshot']
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Install Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.6'
+        architecture: 'x64'
+
+    - name: Install Emacs
+      uses: purcell/setup-emacs@master
+      with:
+        version: ${{matrix.emacs_version}}
+
+    - name: Install Cask
+      uses: conao3/setup-cask@master
+      with:
+        version: 'snapshot'
+
+    - name: Install dependencies
+      run: cask install
+
+    - name: Test
+      run: make test
+
+    - name: SSH into container on failure
+      if: ${{ false }}
+      # You can use this if statement to enable this during development.
+      #if: ${{ failure() }}
+      uses: lhotari/action-upterm@v1
+      with:
+        ## limits ssh access and adds the ssh public key for the user which triggered the workflow
+        limit-access-to-actor: true
