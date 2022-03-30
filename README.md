@@ -1,6 +1,6 @@
 # El mock
 
-[![Build Status](https://travis-ci.org/rejeep/el-mock.el.svg)](https://travis-ci.org/rejeep/el-mock.el)
+[![Build Status](file:https://github.com/rejeep/el-mock.el/actions/workflows/main.yml/badge.svg)](https://github.com/rejeep/el-mock.el/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/rejeep/el-mock.el/badge.svg)](https://coveralls.io/r/rejeep/el-mock.el)
 [![MELPA](http://melpa.org/packages/el-mock-badge.svg)](http://melpa.org/#/el-mock)
 [![MELPA stable](http://stable.melpa.org/packages/el-mock-badge.svg)](http://stable.melpa.org/#/el-mock)
