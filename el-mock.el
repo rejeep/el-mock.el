@@ -144,7 +144,8 @@
 Prepare for mock/stub, call BODY-FN, and teardown mock/stub.
 
 For developer:
-When you adapt Emacs Lisp Mock to a testing framework, wrap test method around this function."
+When you adapt Emacs Lisp Mock to a testing framework,
+wrap test method around this function."
   (let (mock-verify-list
         -stubbed-functions
         -mocked-functions
@@ -186,7 +187,8 @@ Example:
 
 (defmacro stub (function &rest rest)
   "Create a stub for FUNCTION.
-Stubs are temporary functions which accept any arguments and return constant value.
+Stubs are temporary functions which accept any arguments
+and return constant value.
 Stubs are removed outside `with-mock' (`with-stub' is an alias) and `mocklet'.
 
 Synopsis:
@@ -214,8 +216,10 @@ Example:
 
 (defmacro mock (func-spec &rest rest)
     "Create a mock for function described by FUNC-SPEC.
-Mocks are temporary functions which accept specified arguments and return constant value.
-If mocked functions are not called or called by different arguments, an `mock-error' occurs.
+Mocks are temporary functions which accept specified arguments
+and return constant value.
+If mocked functions are not called or called by different arguments,
+an `mock-error' occurs.
 Mocks are removed outside `with-mock' and `mocklet'.
 
 Synopsis:
