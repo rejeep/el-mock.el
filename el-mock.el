@@ -128,11 +128,16 @@
                               (cons funcsym actual-args))))
   (cl-loop for e in expected-args
            for a in actual-args
+           for i below (length expected-args)
            do
            (unless (eq e '*)               ; `*' is wildcard argument
              (unless (equal (eval e) a)
                (signal 'mock-error (list (cons funcsym expected-args)
-                                         (cons funcsym actual-args))))))
+                                         (cons funcsym actual-args)
+                                         (format
+                                          (concat "Differing arguments at index %d: "
+                                                  "expected %S (=> %S), actual %S")
+                                          i e (eval e) a))))))
   (let ((actual-times (or (get funcsym 'mock-call-count) 0)))
     (and expected-times (/= expected-times actual-times)
          (signal 'mock-error (list (cons funcsym expected-args)
